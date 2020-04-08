@@ -26,7 +26,8 @@ const searchAddon = (addonName) => {
             let parsedData = JSON.parse(data);
 
             if (parsedData.length > 0) {
-                for (let i = 0; i < 10; i++) {
+                var count = parsedData.length < 10 ? parsedData.length : 10;
+                for (let i = 0; i < count; i++) {
                     let message = parsedData[i].id + ' ' + parsedData[i].name;
                     console.log(message);
                 }
