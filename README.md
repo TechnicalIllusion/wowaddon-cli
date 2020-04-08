@@ -9,9 +9,11 @@ This package executes get requests on the curseforge api based on parameters fro
 This causes the information passed from the node app to the wget command and downloads the zip package specified in the command. There are also a couple utility commands that can be used to find the information you need for the above command.
 
 <p>wowaddon-cli -k addonName</p>
+
 Searches for the top 10 package IDs based on your addonname.
 
 <p>wowaddon-cli -k addonName -f true</p>
+
 Gives the details needed for the wget command for the first package found with the name you give. 
 
 I recommend using the -k only option to make sure your desired result is at the top of the list, then adjust the name you give to make it the top. This will give the best results when used with the wget command to pull the package.
