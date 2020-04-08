@@ -26,7 +26,7 @@ const searchAddon = (addonName) => {
             let parsedData = JSON.parse(data);
 
             if (parsedData.length > 0) {
-                for (let i = 0; i < parsedData.length; i++) {
+                for (let i = 0; i < 10; i++) {
                     let message = parsedData[i].id + ' ' + parsedData[i].name;
                     console.log(message);
                 }
@@ -92,7 +92,7 @@ const findFile = (filename, id) => {
     });
 }
 
-if (addOnId && fileName && !searchTerm)
+if (addOnId && fileName)
     findFile(fileName, addOnId);
 
 if (fullChoice && searchTerm)
