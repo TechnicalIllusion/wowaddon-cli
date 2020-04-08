@@ -54,7 +54,7 @@ const fullAddon = (addonName) => {
 
             if (parsedData.length > 0) {
                 let outputList = parsedData[0].gameVersionLatestFiles;
-                outputList = outputList.filter(x => x.fileType == 1);
+                outputList = outputList.filter(x => x.fileType == 1 && x.gameVersionFlavor == 'wow_retail');
 
                 console.log(outputList[0]);
                 console.log('AddonId: ' + parsedData[0].id);
