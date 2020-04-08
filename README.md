@@ -4,7 +4,7 @@ I was trying to automate the process of updating wow addons in Ubuntu using Wine
 # How?
 This package executes get requests on the curseforge api based on parameters from the command line arguments. Using yargs I build out the command line tool and used it to make getting the information for a WGET much easier. The way I use this is: 
 
-<p>wget $(wowaddon-cli -i AddonIdNumber -f filenameToDownload)</p>
+<p>wget $(wowaddon-cli -i AddonIdNumber -n filenameToDownload)</p>
 
 This causes the information passed from the node app to the wget command and downloads the zip package specified in the command. There are also a couple utility commands that can be used to find the information you need for the above command.
 
