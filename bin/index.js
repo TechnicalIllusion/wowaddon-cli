@@ -5,6 +5,9 @@ const argv = require('yargs')
     .option('addonID', { alias: 'i', type: 'string', description: 'Addon ID' })
     .option('searchTerm', { alias: 'k', type: 'string', description: 'Search term for addon' })
     .option('full', { alias: 'f', type: 'boolean', description: 'Get full info about addon the first result' })
+    .example('wowaddon-cli -k bigwigs', 'Search for addon named bigwigs')
+    .example('wowaddon-cli -k bigwigs -f true', 'Display most recent retail file details and addon Id')
+    .example('wowaddon-cli -i 2382 -n BigWigs-v184.2.zip', 'Displays download link for BigWigs Bossmods - id 2382 and filename BigWigs-v184.2.zip')
     .argv;
 
 const baseUrl = 'https://addons-ecs.forgesvc.net/api/v2/addon/';
@@ -85,7 +88,7 @@ const findFile = (filename, id) => {
             if (parsedData.length > 0) {
                 console.log(parsedData[0].downloadUrl);
             } else {
-                console.log('an error occured');
+                console.log('No results were found, check spelling and id number.');
             }
         })
     }).on('error', (err) => {
