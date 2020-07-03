@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 const https = require('https');
 const argv = require('yargs')
-    .option('file-name', { alias: 'n', type: 'string', description: 'Addon File Name' })
-    .option('addon-id', { alias: 'i', type: 'string', description: 'Addon ID' })
-    .option('search-term', { alias: 'k', type: 'string', description: 'Search term for addon' })
+    .option('fileName', { alias: 'n', type: 'string', description: 'Addon File Name' })
+    .option('addOnId', { alias: 'i', type: 'string', description: 'Addon ID' })
+    .option('searchTerm', { alias: 'k', type: 'string', description: 'Search term for addon' })
     .option('full', { alias: 'f', type: 'boolean', description: 'Get full info about addon the first result' })
     .example('wowaddon-cli -k bigwigs', 'Search for addon named bigwigs')
     .example('wowaddon-cli -k bigwigs -f true', 'Display most recent retail file details and addon Id')
@@ -11,10 +11,7 @@ const argv = require('yargs')
     .argv;
 
 const baseUrl = 'https://addons-ecs.forgesvc.net/api/v2/addon/';
-const addOnId = argv["addon-id"];
-const fileName = argv["file-name"];
-const searchTerm = argv["search-term"];
-const fullChoice = argv["full"];
+const { addOnId, fileName, searchTerm, full } = argv;
 
 const searchAddon = (addonName) => {
     searchPayload = '?gameId=1&sort=TotalDownloads&sortDescending=true&searchFilter=' + addonName;
@@ -99,8 +96,8 @@ const findFile = (filename, id) => {
 if (addOnId && fileName)
     findFile(fileName, addOnId);
 
-if (fullChoice && searchTerm)
+if (full && searchTerm)
     fullAddon(searchTerm);
 
-if (searchTerm && !fullChoice)
+if (searchTerm && !full)
     searchAddon(searchTerm);
