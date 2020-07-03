@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const https = require('https');
+const axios =require('axios');
 const argv = require('yargs')
     .option('fileName', { alias: 'n', type: 'string', description: 'Addon File Name' })
     .option('addOnId', { alias: 'i', type: 'string', description: 'Addon ID' })
@@ -14,82 +14,51 @@ const baseUrl = 'https://addons-ecs.forgesvc.net/api/v2/addon/';
 const { addOnId, fileName, searchTerm, full } = argv;
 
 const searchAddon = (addonName) => {
-    searchPayload = '?gameId=1&sort=TotalDownloads&sortDescending=true&searchFilter=' + addonName;
-    https.get(baseUrl + 'search' + searchPayload, (resp) => {
-        let data = '';
+    searchPayload = 'search?gameId=1&sort=TotalDownloads&sortDescending=true&searchFilter=' + addonName;
 
-        resp.on('data', (chunk) => {
-            data += chunk;
-        });
-
-        resp.on('end', () => {
-            let parsedData = JSON.parse(data);
-
-            if (parsedData.length > 0) {
-                var count = parsedData.length < 10 ? parsedData.length : 10;
-                for (let i = 0; i < count; i++) {
-                    let message = parsedData[i].id + ' ' + parsedData[i].name;
-                    console.log(message);
-                }
-            } else {
-                console.log('No addon with that name was found');
+    axios.get(baseUrl + searchPayload).then((response) => {
+        if (response.data.length > 0) {
+            var count = response.data.length < 10 ? response.data.length : 10;
+            for (let i = 0; i < count; i++) {
+                console.log(response.data[i].id + ' ' + response.data[i].name);
             }
-        });
-    }).on('error', (err) => {
-        console.log(err.message);
+        } else {
+            console.log('No addon with that name was found');
+        }
+    }).catch((error) => {
+        console.log(error);
     });
 }
 
 const fullAddon = (addonName) => {
-    searchPayload = '?gameId=1&sort=TotalDownloads&sortDescending=true&searchFilter=' + addonName;
-    https.get(baseUrl + 'search' + searchPayload, (resp) => {
-        let data = '';
+    searchPayload = 'search?gameId=1&sort=TotalDownloads&sortDescending=true&searchFilter=' + addonName;
 
-        resp.on('data', (chunk) => {
-            data += chunk;
-        });
+    axios.get(baseUrl + searchPayload).then((response) => {
+        if (response.data.length > 0) {
+            let outputList = response.data[0].gameVersionLatestFiles
+                .filter(x => x.fileType === 1 && x.gameVersionFlavor === 'wow_retail');
 
-        resp.on('end', () => {
-            let parsedData = JSON.parse(data);
-
-            if (parsedData.length > 0) {
-                let outputList = parsedData[0].gameVersionLatestFiles;
-                outputList = outputList.filter(x => x.fileType == 1 && x.gameVersionFlavor == 'wow_retail');
-
-                console.log(outputList[0]);
-                console.log('AddonId: ' + parsedData[0].id);
-                console.log('This is the first item in the list of items you search for.');
-            } else {
-                console.log('No addon with that name was found');
-            }
-        });
-    }).on('error', (err) => {
-        console.log(err.message);
+            let message = {
+                addonId: response.data[0].id,
+                fileDetails: outputList[0],
+                description: 'This is the first item in the list of items you searched for.'
+            };
+            
+            console.log(message);
+        } else {
+            console.log('No addon with that name was found.');
+        }
+    }).catch((error) => {
+        console.log(error);
     });
 }
 
 const findFile = (filename, id) => {
-    let parsedData = [];
-
-    https.get(baseUrl + id + '/files', (resp) => {
-        let data = '';
-
-        resp.on('data', (chunk) => {
-            data += chunk;
-        });
-
-        resp.on('end', () => {
-            parsedData = JSON.parse(data);
-            parsedData = parsedData.filter(x => x.fileName === filename);
-
-            if (parsedData.length > 0) {
-                console.log(parsedData[0].downloadUrl);
-            } else {
-                console.log('No results were found, check spelling and id number.');
-            }
-        })
-    }).on('error', (err) => {
-        console.log(err.message);
+    axios.get(baseUrl + id + '/files').then((response) => {
+        let filteredResponse = response.data.filter(x => x.fileName === filename);
+        console.log(filteredResponse[0].downloadUrl);
+    }).catch((error) => {
+        console.log(error);
     });
 }
 
