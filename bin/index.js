@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const helper = require('./helper');
+const { displayDownloadLink, displayLatestFileInfo, findAddonByName } = require('./helper');
 
 const argv = require('yargs')
     .option('fileName', { alias: 'n', type: 'string', description: 'Addon File Name' })
@@ -15,10 +15,10 @@ const argv = require('yargs')
 const { addOnId, fileName, searchTerm, full } = argv;
 
 if (addOnId && fileName)
-    helper.displayDownloadLink(fileName, addOnId);
+    displayDownloadLink(fileName, addOnId);
 
 if (full && searchTerm)
-    helper.displayLatestFileInfo(searchTerm);
+    displayLatestFileInfo(searchTerm);
 
 if (searchTerm && !full)
-    helper.findAddonByName(searchTerm);
+    findAddonByName(searchTerm);
