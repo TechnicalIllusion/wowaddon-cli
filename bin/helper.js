@@ -2,6 +2,7 @@ const axios = require('axios');
 
 const baseUrl = 'https://addons-ecs.forgesvc.net/api/v2/addon/';
 
+// Displays list of top 10 addons ids and names based on search string
 const findAddonByName = (addonName) => {
     let searchPayload = 'search?gameId=1&sort=TotalDownloads&sortDescending=true&searchFilter=' + addonName;
 
@@ -19,6 +20,7 @@ const findAddonByName = (addonName) => {
     });
 }
 
+// Displays detailed file information for the top search result
 const displayLatestFileInfo = (addonName) => {
     let searchPayload = 'search?gameId=1&sort=TotalDownloads&sortDescending=true&searchFilter=' + addonName;
 
@@ -42,6 +44,7 @@ const displayLatestFileInfo = (addonName) => {
     });
 }
 
+// Displays only the download link as a string 
 const displayDownloadLink = (filename, id) => {
     axios.get(baseUrl + id + '/files').then((response) => {
         let filteredResponse = response.data.filter(x => x.fileName === filename);
